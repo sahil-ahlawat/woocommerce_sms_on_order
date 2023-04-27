@@ -43,35 +43,21 @@ function sawo_woocommerceHook( $order_id ) {
         // Get customer billing information details
         $billing_first_name = $order->get_billing_first_name();
         $billing_last_name  = $order->get_billing_last_name();
-        $billing_company    = $order->get_billing_company();
-        $billing_address_1  = $order->get_billing_address_1();
-        $billing_address_2  = $order->get_billing_address_2();
-        $billing_city       = $order->get_billing_city();
-        $billing_state      = $order->get_billing_state();
-        $billing_postcode   = $order->get_billing_postcode();
-        $billing_country    = $order->get_billing_country();
-        
-        // Get customer shipping information details
-        $shipping_first_name = $order->get_shipping_first_name();
-        $shipping_last_name  = $order->get_shipping_last_name();
-        $shipping_company    = $order->get_shipping_company();
-        $shipping_address_1  = $order->get_shipping_address_1();
-        $shipping_address_2  = $order->get_shipping_address_2();
-        $shipping_city       = $order->get_shipping_city();
-        $shipping_state      = $order->get_shipping_state();
-        $shipping_postcode   = $order->get_shipping_postcode();
-        $shipping_country    = $order->get_shipping_country();
-        $user = $order->get_user(); // Fetch all the other user data from here.
-        $content = [];
+        $billing_phone   = $order->get_billing_phone();
+        $contents = [];
         $template = get_option("sawo_woocomerce_order_sms_template");
         if(!empty($template)){
-             $content['send_to'] = ""; // Add user number here.
-             $content['message'] = ""; // Create content that you want using $order & $user.
-             sawo_sendSms($content); // Use your send function to send API request.
+            // replace order number and user name in template
+            $content = str_replace("#ordernumber",$order_number,$template);
+            $content = str_replace("#name", $billing_first_name, $content);
+            update_option( "sawo_woocomerce_order_sms_template_sent", $content." : Sent to ".$billing_phone);
+             $contents['send_to'] = $billing_phone; // Add user number here.
+             $contents['message'] =  $content; // Create content that you want using $order & $user.
+             sawo_sendSms($contents); // Use your send function to send API request.
         }
        
         // Output some data
-        echo '<p>Order ID: '. $order_id . ' — Order Status: ' . $order->get_status() . ' — Order is paid: ' . $paid . '</p>';
+        
 
         // Flag the action as done (to avoid repetitions on reload for example)
         $order->update_meta_data( '_thankyou_action_done', true );
