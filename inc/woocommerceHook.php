@@ -9,7 +9,7 @@
 function sawo_woocommerceHook( $order_id ) {
     if ( ! $order_id )
         return;
-
+    
     // Allow code execution only once 
     if( ! get_post_meta( $order_id, '_thankyou_action_done', true ) ) {
 
@@ -44,6 +44,7 @@ function sawo_woocommerceHook( $order_id ) {
         $billing_first_name = $order->get_billing_first_name();
         $billing_last_name  = $order->get_billing_last_name();
         $billing_phone   = $order->get_billing_phone();
+        $billingcountrycode = WC()->customer->get_billing_country();
         $contents = [];
         $template = get_option("sawo_woocomerce_order_sms_template");
         if(!empty($template)){
@@ -51,6 +52,7 @@ function sawo_woocommerceHook( $order_id ) {
             $content = str_replace("#ordernumber",$order_number,$template);
             $content = str_replace("#name", $billing_first_name, $content);
             update_option( "sawo_woocomerce_order_sms_template_sent", $content." : Sent to ".$billing_phone);
+             $contents['country'] = $billingcountrycode; // Add user number here.
              $contents['send_to'] = $billing_phone; // Add user number here.
              $contents['message'] =  $content; // Create content that you want using $order & $user.
              sawo_sendSms($contents); // Use your send function to send API request.
