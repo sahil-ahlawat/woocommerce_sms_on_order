@@ -10,11 +10,16 @@ function sawo_sendSms($data=array())
 {
 
   $countries = ["SA"=>"966", "AE"=>"971", "KW"=>"965", "BH"=>"973", "QA"=>"974", "OM"=>"968", "IN"=>"91"];
-	// for promotional and payment
+	$countrycode = "";
+  if(isset($countries[$data["country"]])){
+    $countrycode = $data["country"];
+  }
+  
+  // for promotional and payment
 	$accesskey = 't8LJgGlNqLs3cyy';
 	$sid = 'YORK%20FURN';
 	$type = 3;
-	$mno = $countries[$data["country"]].$data['send_to'];
+	$mno = $countrycode.$data['send_to'];
 	$text=array($data['message']); 
     $text= http_build_query($text);
     $text= substr($text, 2);
