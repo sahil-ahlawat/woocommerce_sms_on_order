@@ -12,7 +12,7 @@ function sawo_sendSms($data=array())
   $countries = ["SA"=>"966", "AE"=>"971", "KW"=>"965", "BH"=>"973", "QA"=>"974", "OM"=>"968", "IN"=>"91"];
 	$countrycode = "";
   if(isset($countries[$data["country"]])){
-    $countrycode = $data["country"];
+    $countrycode = $countries[$data["country"]];
   }
   
   // for promotional and payment

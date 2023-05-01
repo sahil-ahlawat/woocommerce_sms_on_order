@@ -60,7 +60,6 @@ function sawo_woocommerceHook( $order_id ) {
        
         // Output some data
         
-
         // Flag the action as done (to avoid repetitions on reload for example)
         $order->update_meta_data( '_thankyou_action_done', true );
         $order->save();
