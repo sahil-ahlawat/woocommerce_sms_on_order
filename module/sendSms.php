@@ -17,9 +17,10 @@ function sawo_sendSms($data=array())
   
   // for promotional and payment
 	$accesskey = 't8LJgGlNqLs3cyy';
-	$sid = 'YORK%20FURN';
+	$sid = 'Okka%20Beauty';
 	$type = 3;
-	$mno = $countrycode.$data['send_to'];
+  $senttonum = ltrim($data['send_to'], "0");
+	$mno = $countrycode.$senttonum;
 	$text=array($data['message']); 
     $text= http_build_query($text);
     $text= substr($text, 2);
